@@ -76,8 +76,8 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = "settings.wsgi.application"
-ASGI_APPLICATION = "settings.asgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
 
 DB_ENGINE = os.getenv("DB_ENGINE")
