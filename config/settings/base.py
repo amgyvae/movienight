@@ -38,7 +38,7 @@ DJANGO_AND_THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.users.apps.UsersConfig", # nado dopisat Config(mozhete checkunt core/apps.py)
     "apps.core.apps.CoreConfig",
-    "apps.movies.apps",
+    "apps.movies.apps.MoviesConfig",
     "apps.preferences.apps.PreferencesConfig",
     "apps.rooms.apps.RoomsConfig",
     "apps.voting.apps.VotingConfig",
