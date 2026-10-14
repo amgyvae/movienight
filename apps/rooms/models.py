@@ -36,3 +36,23 @@ class Room(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}({self.code})"
+
+class RoomMember(models.Model):
+    room = models.ForeignKey(
+        Room, on_delete=models.CASCADE, related_name="members"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
+    joined_at = models.DateTimeField(auto_now_add=True)
+    is_ready = models.BooleanField(default=True)
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["room", "user"],
+                name = "unique_room_member_pair",
+            )
+        ]
+    def __str__(self) -> str:
+        return f"{self.user} in {self.room}"
