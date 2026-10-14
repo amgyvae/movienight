@@ -1,1 +1,7 @@
-This branch for Margulan
+Django MovieNight project
+Team Member:
+Margulan
+Nuray
+Diana
+Amina
+Yeraly
