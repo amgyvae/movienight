@@ -4,16 +4,11 @@ import sys
 from settings.conf import ENV_ID
 
 
+from settings.conf import ENV_ID
+
+
 def main():
     """Run administrative tasks."""
-
-    assert ENV_ID, "MOVIENIGHT_ENV_ID is not settings/.env" 
-
-
-    os.environ.setdefault(
-        'DJANGO_SETTINGS_MODULE', 
-        f'settings.env.{ENV_ID}', 
-        )
 
     try:
         from django.core.management import execute_from_command_line

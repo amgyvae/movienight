@@ -1,5 +1,6 @@
 import os
 
+
 from settings.conf import * #noqa
 
 
@@ -18,6 +19,7 @@ DJANGO_AND_THIRD_PARTY_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
 PROJECT_APPS = [
     "apps.users.apps.UsersConfig", # nado dopisat Config(mozhete checkunt core/apps.py)
     "apps.core.apps.CoreConfig",
@@ -41,6 +43,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -56,6 +59,7 @@ TEMPLATES = [
         },
     },
 ]
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -81,4 +85,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
