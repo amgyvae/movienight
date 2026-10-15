@@ -4,9 +4,6 @@ import sys
 from settings.conf import ENV_ID
 
 
-from settings.conf import ENV_ID
-
-
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", f"settings.env.{ENV_ID}")
