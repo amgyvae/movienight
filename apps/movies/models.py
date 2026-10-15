@@ -50,6 +50,18 @@ class Movie(models.Model):
         through="MovieCredit",
     )
 
+    @property 
+    def full_poster_url(self):
+        if not self.poster_path:
+            return ""
+        if self.poster_path.startswith(("https://", "http://")):
+            return self.poster_path
+
+        return (
+            "https://image.tmdb.org/t/p/w500/"
+            f"{self.poster_path.lstrip('/')}"
+        )
+
     def __str__(self):
         return f"{self.title} ({self.year})"
 
@@ -66,6 +78,7 @@ class MovieCredit(models.Model):
         max_length=20,
         choices=ROLE_CHOICES,
     )
+    order = models.PositiveBigIntegerField(default=0)
 
     def __str__(self):
         return (
