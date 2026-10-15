@@ -25,21 +25,21 @@ MAX_RATING = 10.0
 class UserRating(Model):
 
     SOURCE_MAX_LEN = 20
-    SOURCE_LETTERBOXD = 'letterboxd',
-    SOURCE_MANUAL = 'manual', 
+    SOURCE_LETTERBOXD = "letterboxd"
+    SOURCE_MANUAL = "manual"
     SOURCE_CHOICES = (
-        (SOURCE_LETTERBOXD, 'Letterboxd'),
-        (SOURCE_MANUAL, 'Manual'),
+        (SOURCE_LETTERBOXD, "Letterboxd"),
+        (SOURCE_MANUAL, "Manual"),
     )
 
     user = ForeignKey(
-    to = settings.AUTH_USER_MODEL,
-    on_delete = PROTECT,
-    related_name = 'ratings',
-    verbose_name = 'User',
+        to = settings.AUTH_USER_MODEL,
+        on_delete = PROTECT,
+        related_name = 'ratings',
+        verbose_name = 'User',
     )
     movie = ForeignKey(
-        to = 'movies.Movie'
+        to = 'movies.Movie',
         on_delete = PROTECT,
         related_name = 'ratings',
         verbose_name = 'Movie',
@@ -58,46 +58,46 @@ class UserRating(Model):
         )
     watched_at = DateField(
         null=True, 
-        blank=True
+        blank=True,
         verbose_name = 'Watched at'
         )
     review = TextField(
         null=True, 
-        blank=True
+        blank=True,
         verbose_name = 'Review'
         )
 
-        class Meta:
+    class Meta:
 
-            verbose_name = 'User rating'
-            verbose_name_plural = 'User ratings'
+        verbose_name = 'User rating'
+        verbose_name_plural = 'User ratings'
 
-            constraints [
-                UniqueConstraint(
-                fields=("user", "movie"),
-                name="unique_user_movie_rating",
-                ),
-            ]
+        constraints = [
+            UniqueConstraint(
+            fields=("user", "movie"),
+            name="unique_user_movie_rating",
+            ),
+        ]
         
-        def __str__(self) -> self:
-            return f"{self.user} - {self.movie}: {self.normalized_rating}"
+    def __str__(self) -> str:
+        return f"{self.user} - {self.movie}: {self.normalized_rating}"
 
 
 class ImportJob(Model):
 
-    STATUS_MAX_LEN = 20,
-    STATUS_PENDING = 'pending',
-    STATUS_COMPLETED = 'completed',
-    STATUS_FAILED = 'falied',
+    STATUS_MAX_LEN = 20
+    STATUS_PENDING = 'pending'
+    STATUS_COMPLETED = 'completed'
+    STATUS_FAILED = 'falied'
     STATUS_CHOICES = (
-        (STATUS_PENDING, 'Pending'),
-        (STATUS_COMPLETED, 'Completted'),
-        (STATUS_FAILED, 'Failed')
+        (STATUS_PENDING, "Pending"),
+        (STATUS_COMPLETED, "Completted"),
+        (STATUS_FAILED, "Failed")
     )
 
     user = ForeignKey(
-        to = AUTH_USER_MODEL, 
-        on_delelte = PROTECT, 
+        to = settings.AUTH_USER_MODEL, 
+        on_delete = PROTECT, 
         related_name = 'import_jobs',
         verbose_name = 'User',
     )
@@ -108,7 +108,7 @@ class ImportJob(Model):
         verbose_name = 'Source',
     )
     file = FileField(
-        upload_to = "/imports",
+        upload_to = "imports/",
         verbose_name = 'File',
     )
     status = CharField(
@@ -139,8 +139,8 @@ class ImportJob(Model):
         verbose_name = 'Import job'
         verbose_name_plural = 'Import jobs'
 
-        def str(self) -> str:
-            return f"Imported #{self.pk} by {self.user} ({self.status})"
+    def str(self) -> str:
+        return f"Imported #{self.pk} by {self.user} ({self.status})"
 
 
 class UnmatchedEntry(Model):
@@ -181,32 +181,32 @@ class UnmatchedEntry(Model):
         verbose_name = 'Unmatched Entry'
         verbose_name_plural = 'Unmatched Entries'
 
-        def __str__(self) -> str:
-            return f"{self.title} ({self.year})"
+    def __str__(self) -> str:
+        return f"{self.title} ({self.year})"
 
 
 class TasteProfile(Model):
 
     user = ForeignKey(
-        to = AUTH_USER_MODEL, 
-        on_delelte = PROTECT, 
+        to = settings.AUTH_USER_MODEL, 
+        on_delete = PROTECT, 
         related_name = 'taste_profiles',
         verbose_name = 'User'
     )
-    genre = models.ForeignKey(
+    genre = ForeignKey(
         to = 'movies.Genre', 
-        on_delelte = PROTECT, 
+        on_delete = PROTECT, 
         null = True, 
         blank = True,
-        related_name = 'taste_profiles',
+        related_name = 'taste_genre',
         verbose_name = 'Genre'
     )
     person = ForeignKey(
         to = 'movies.Genre', 
-        on_delelte = PROTECT, 
+        on_delete = PROTECT, 
         null = True, 
         blank = True,
-        related_name = 'taste_profiles',
+        related_name = 'taste_person',
         verbose_name = 'Person'
     )
     weight = FloatField(
@@ -223,8 +223,8 @@ class TasteProfile(Model):
         verbose_name = 'Taste Profile' 
         verbose_name_plural = 'Taste Profiles'
 
-        def __str__(self) -> str:
-            return f"{self.user} - {self.genre or self.person}: {self.weight}"
+    def __str__(self) -> str:
+        return f"{self.user} - {self.genre or self.person}: {self.weight}"
 
 
 class WatchlistItem(Model):
@@ -257,5 +257,5 @@ class WatchlistItem(Model):
             )
         ]
 
-        def __str__(self) -> str:
-            return f"{self.user} wants to watch {self.movie}"
+    def __str__(self) -> str:
+        return f"{self.user} wants to watch {self.movie}"
