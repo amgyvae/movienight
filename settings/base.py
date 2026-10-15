@@ -44,7 +44,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -60,7 +59,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -87,6 +85,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
