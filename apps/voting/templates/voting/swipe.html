@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieNight - Voting</title>
+
+    <style>
+        body {
+            background: #14141f;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 40px 15px;
+        }
+
+        .movie-card {
+            background: #252538;
+            width: 320px;
+            max-width: 100%;
+            margin: 30px auto;
+            padding: 25px;
+            border-radius: 20px;
+            box-sizing: border-box;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .poster {
+            width: 100%;
+            height: 260px;
+            background: #38384d;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 75px;
+        }
+
+        button {
+            border: none;
+            padding: 15px 22px;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 8px;
+        }
+
+        .dislike { background: #e74c3c; }
+        .like { background: #27ae60; }
+
+        .hidden { display: none; }
+        .swiping {
+            transform: translateX(80px);
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>MovieNight 🎬</h1>
+    <p>Choose a movie you want to watch!</p>
+
+    {% if candidate %}
+    <div class="movie-card" id="movieCard">
+        <div class="poster">🎥</div>
+
+        <h2 id="movieTitle">{{ candidate.movie }}</h2>
+
+        <p>
+            Group Score:
+            <span id="groupScore">
+                {{ candidate.group_score|floatformat:2 }}
+            </span>
+        </p>
+
+        <form id="voteForm" method="post">
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                id="candidateId"
+                name="candidate_id"
+                value="{{ candidate.id }}"
+            >
+
+            <button
+                type="button"
+                class="dislike"
+                onclick="sendVote('dislike')"
+            >
+                ❌ Dislike
+            </button>
+
+            <button
+                type="button"
+                class="like"
+                onclick="sendVote('like')"
+            >
+                ❤️ Like
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+    <p id="waitingMessage" class="{% if candidate %}hidden{% endif %}">
+        You finished voting! Waiting for others...
+    </p>
+
+    <script>
+        let isSubmitting = false;
+
+        async function sendVote(value) {
+            if (isSubmitting) return;
+
+            isSubmitting = true;
+
+            const form = document.getElementById("voteForm");
+            const card = document.getElementById("movieCard");
+            const formData = new FormData(form);
+
+            formData.set("value", value);
+
+            try {
+                const response = await fetch(
+                    "{% url 'voting:vote' session.id %}",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "Voting failed");
+                }
+
+                card.classList.add("swiping");
+
+                await new Promise(resolve =>
+                    setTimeout(resolve, 300)
+                );
+
+                if (data.status === "completed") {
+                    window.location.href = data.result_url;
+                    return;
+                }
+
+                if (data.status === "waiting") {
+                    card.classList.add("hidden");
+                    document.getElementById("waitingMessage")
+                        .classList.remove("hidden");
+                    return;
+                }
+
+                if (data.status === "next") {
+                    document.getElementById("candidateId").value =
+                        data.candidate_id;
+
+                    document.getElementById("movieTitle").textContent =
+                        data.movie_title;
+
+                    document.getElementById("groupScore").textContent =
+                        Number(data.group_score).toFixed(2);
+
+                    card.classList.remove("swiping");
+                }
+
+            } catch (error) {
+                alert(error.message);
+                card.classList.remove("swiping");
+            } finally {
+                isSubmitting = false;
+            }
+        }
+    </script>
+
+</body>
+</html>

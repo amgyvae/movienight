@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieNight - Result</title>
+
+    <style>
+        body {
+            background: #14141f;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 50px 20px;
+        }
+
+        .result-card {
+            background: #252538;
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 35px;
+            border-radius: 20px;
+        }
+
+        .trophy {
+            font-size: 80px;
+            margin-bottom: 15px;
+        }
+
+        .movie-poster {
+            background: #38384d;
+            padding: 50px;
+            font-size: 70px;
+            border-radius: 12px;
+            margin: 20px auto;
+        }
+
+        .likes {
+            color: #2ecc71;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #6c5ce7;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            margin-top: 25px;
+        }
+
+        .back-button:hover {
+            background: #5849c4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>MovieNight 🎬</h1>
+
+    <div class="result-card">
+
+        {% if result %}
+
+            <div class="trophy">🏆</div>
+
+            <h1>We Have a Winner!</h1>
+
+            <p>Your group has chosen:</p>
+
+            <div class="movie-poster">🎥</div>
+
+            <h2>{{ result.movie }}</h2>
+
+            <p class="likes">
+                ❤️ {{ result.likes_count }} Likes
+            </p>
+
+            <p>Enjoy your movie night!</p>
+
+        {% else %}
+
+            <div class="trophy">🎬</div>
+
+            <h2>No Winner Found</h2>
+
+            <p>
+                No movie received enough votes
+                in this round.
+            </p>
+
+        {% endif %}
+
+        <a href="/" class="back-button">
+            Back to Home
+        </a>
+
+    </div>
+
+</body>
+</html>
