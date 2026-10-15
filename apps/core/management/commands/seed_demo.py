@@ -76,7 +76,9 @@ class Command(BaseCommand):
         genre = Genre.objects.first()
 
         for user in users:
-            stars_list = DEMO_RATINGS[user.username]
+            stars_list = DEMO_RATINGS.get(user.username)
+            if stars_list is None:
+                continue
 
             for movie, stars in zip(movies, stars_list):
                 UserRating.objects.get_or_create(
@@ -98,13 +100,14 @@ class Command(BaseCommand):
                     defaults={"weight": FAVORITE_GENRE_WEIGHT},
                 )
 
-    def create_room(self, users: list[User]) -> None:
-        room, _ = Room.objects.get_or_create(
+    def create_room(self, users):
+        """Create a demo room and add all users to it."""
+        room, created = Room.objects.get_or_create(
             code=DEMO_ROOM_CODE,
             defaults={
-                "name": "Movie Night (Demo)",
+                "name": "Demo room",
                 "owner": users[0],
-                "status": Room.STATUS_OPEN,
+                "status": "open",
             },
         )
         for user in users:

@@ -1,9 +1,13 @@
-from django.db import models
+from django.db.models import DateTimeField, Model
 
-class TimeSampedModel(models.Model):
-    """  An abstract base class model that provides self-updating 'created' and 'modified' fields. """
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+
+class AbstractBaseModel(Model):
+    """Abstract base model with created and updated timestamps."""
+
+    created_at = DateTimeField(auto_now_add=True, verbose_name="Created at")
+    updated_at = DateTimeField(auto_now=True, verbose_name="Updated at")
 
     class Meta:
+        """Meta options."""
+
         abstract = True
